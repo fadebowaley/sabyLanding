@@ -9,150 +9,228 @@ import Footer from "../src/components/Footer";
 export default function PricingPage() {
   const router = useRouter();
   const { isDark, toggleTheme } = useTheme();
+  // Submission tiers: 1000, 2500, 5000, 7500, 10k, 25k, 50k, 75k, 100k
+  const submissionTiers = [
+    1000, 2500, 5000, 7500, 10000, 25000, 50000, 75000, 100000,
+  ];
   const [memberCount, setMemberCount] = useState(1000);
   const [billingType, setBillingType] = useState<"monthly" | "yearly">(
     "yearly"
   );
 
+  // Get current tier index
+  const getCurrentTierIndex = () => {
+    const index = submissionTiers.findIndex((tier) => tier >= memberCount);
+    return index >= 0 ? index : submissionTiers.length - 1;
+  };
+
+  // Format submission count
+  const formatSubmissionCount = (count: number) => {
+    if (count >= 100000) return "100k+";
+    if (count >= 10000) return `${count / 1000}k`;
+    return count.toLocaleString();
+  };
+
   const plans = [
     {
       name: "STARTER",
-      description: "For solo blogs & newsletters",
-      price: 15,
-      originalPrice: 15,
-      launchPrice: 7,
+      description: "Perfect for small teams getting started",
+      price: {
+        monthly: 29,
+        yearly: 24,
+      },
+      originalPrice: 29,
+      launchPrice: null,
       features: {
-        staffUsers: 1,
-        fileUploads: "5mb",
-        whitelabelBranding: true,
-        customDomain: true,
-        internationalization: true,
-        designSettings: true,
-        marketplaceThemes: false,
-        customThemes: false,
-        registeredMembers: 1000,
-        memberTagging: true,
-        memberImportExport: true,
-        communityComments: true,
+        workspaces: 5,
+        submissionsPerMonth: "25,000",
+        fileUploadSize: "5MB",
+        integrations: ["Email", "Webhooks"],
+        apiRateLimit: "1,000 requests/day",
+        support: "Community",
+        analytics: "Basic",
+        customBranding: false,
+        aiFormGenerator: false,
+        telegramIntegration: false,
+        whatsappIntegration: false,
+        googleSheets: false,
+        apiAccess: true,
+        exportFormats: ["CSV", "JSON"],
+        storageQuota: "1GB",
       },
     },
     {
-      name: "PUBLISHER",
-      description: "For custom publications",
-      price: 29,
-      originalPrice: 29,
-      launchPrice: 14,
+      name: "PRO",
+      description: "For growing teams with advanced needs",
+      price: {
+        monthly: 79,
+        yearly: 64,
+      },
+      originalPrice: 79,
+      launchPrice: null,
+      badge: "Most Popular",
       features: {
-        staffUsers: 3,
-        fileUploads: "100mb",
-        whitelabelBranding: true,
-        customDomain: true,
-        internationalization: true,
-        designSettings: true,
-        marketplaceThemes: true,
-        customThemes: true,
-        registeredMembers: 1000,
-        memberTagging: true,
-        memberImportExport: true,
-        communityComments: true,
+        workspaces: "Unlimited",
+        submissionsPerMonth: "250,000",
+        fileUploadSize: "100MB",
+        integrations: ["All"],
+        apiRateLimit: "10,000 requests/day",
+        support: "Priority",
+        analytics: "Advanced",
+        customBranding: true,
+        aiFormGenerator: true,
+        telegramIntegration: true,
+        whatsappIntegration: true,
+        googleSheets: true,
+        apiAccess: true,
+        exportFormats: ["CSV", "Excel", "JSON"],
+        storageQuota: "50GB",
       },
     },
     {
       name: "BUSINESS",
-      description: "For teams scaling up",
-      price: 199,
-      originalPrice: 199,
-      launchPrice: 99,
+      description: "For teams scaling operations",
+      price: {
+        monthly: 189,
+        yearly: 169,
+      },
+      originalPrice: 189,
+      launchPrice: null,
       features: {
-        staffUsers: 15,
-        fileUploads: "250mb",
-        whitelabelBranding: true,
-        customDomain: true,
-        internationalization: true,
-        designSettings: true,
-        marketplaceThemes: true,
-        customThemes: true,
-        registeredMembers: 10000,
-        memberTagging: true,
-        memberImportExport: true,
-        communityComments: true,
+        workspaces: "Unlimited",
+        submissionsPerMonth: "1,000,000",
+        fileUploadSize: "250MB",
+        integrations: ["All"],
+        apiRateLimit: "50,000 requests/day",
+        support: "Priority + Dedicated",
+        analytics: "Advanced + Custom",
+        customBranding: true,
+        aiFormGenerator: true,
+        telegramIntegration: true,
+        whatsappIntegration: true,
+        googleSheets: true,
+        apiAccess: true,
+        exportFormats: ["CSV", "Excel", "JSON", "Custom"],
+        storageQuota: "200GB",
       },
     },
     {
-      name: "CUSTOM",
-      description: "For more complex needs",
-      price: "Custom",
+      name: "ENTERPRISE",
+      description: "Mission-critical deployments at scale",
+      price: "Custom" as any,
       originalPrice: "Custom",
       launchPrice: null,
       isCustom: true,
       features: {
-        staffUsers: "Unlimited",
-        fileUploads: "1gb",
-        whitelabelBranding: true,
-        customDomain: true,
-        internationalization: true,
-        designSettings: true,
-        marketplaceThemes: true,
-        customThemes: true,
-        registeredMembers: "Unlimited",
-        memberTagging: true,
-        memberImportExport: true,
-        communityComments: true,
+        workspaces: "Unlimited",
+        submissionsPerMonth: "Unlimited",
+        fileUploadSize: "1GB",
+        integrations: ["All + Custom"],
+        apiRateLimit: "Unlimited",
+        support: "24/7 Enterprise",
+        analytics: "Advanced + Custom + AI",
+        customBranding: true,
+        aiFormGenerator: true,
+        telegramIntegration: true,
+        whatsappIntegration: true,
+        googleSheets: true,
+        apiAccess: true,
+        exportFormats: ["All + Custom"],
+        storageQuota: "Unlimited",
+        ssoSaml: true,
+        privateDataRegions: true,
+        customSla: true,
+        onboardingAssistance: true,
       },
     },
   ];
 
   const featureRows = [
-    { key: "staffUsers", label: "Staff users", category: "Website" },
-    { key: "fileUploads", label: "File uploads", category: "Website" },
+    { key: "workspaces", label: "Workspaces", category: "Platform" },
     {
-      key: "whitelabelBranding",
-      label: "Whitelabel branding",
-      category: "Website",
+      key: "submissionsPerMonth",
+      label: "Submissions/month",
+      category: "Platform",
     },
-    { key: "customDomain", label: "Custom domain", category: "Website" },
+    { key: "fileUploadSize", label: "File upload size", category: "Platform" },
+    { key: "storageQuota", label: "Storage quota", category: "Platform" },
+    { key: "integrations", label: "Integrations", category: "Integrations" },
     {
-      key: "internationalization",
-      label: "Internationalization",
-      category: "Website",
-    },
-    { key: "designSettings", label: "Design settings", category: "Website" },
-    {
-      key: "marketplaceThemes",
-      label: "Marketplace themes",
-      category: "Website",
-    },
-    { key: "customThemes", label: "Custom themes", category: "Website" },
-    {
-      key: "registeredMembers",
-      label: "Registered members",
-      category: "Audience",
-    },
-    { key: "memberTagging", label: "Member tagging", category: "Audience" },
-    {
-      key: "memberImportExport",
-      label: "Member import/export",
-      category: "Audience",
+      key: "telegramIntegration",
+      label: "Telegram bot",
+      category: "Integrations",
     },
     {
-      key: "communityComments",
-      label: "Community comments",
-      category: "Audience",
+      key: "whatsappIntegration",
+      label: "WhatsApp Business API",
+      category: "Integrations",
     },
+    {
+      key: "googleSheets",
+      label: "Google Sheets sync",
+      category: "Integrations",
+    },
+    { key: "apiAccess", label: "API access", category: "Developers" },
+    { key: "apiRateLimit", label: "API rate limit", category: "Developers" },
+    { key: "exportFormats", label: "Export formats", category: "Data" },
+    { key: "analytics", label: "Analytics & Reports", category: "Features" },
+    {
+      key: "aiFormGenerator",
+      label: "AI Form Generator",
+      category: "Features",
+    },
+    { key: "customBranding", label: "Custom branding", category: "Features" },
+    { key: "support", label: "Support", category: "Support" },
+    { key: "ssoSaml", label: "SSO/SAML", category: "Enterprise" },
+    {
+      key: "privateDataRegions",
+      label: "Private data regions",
+      category: "Enterprise",
+    },
+    { key: "customSla", label: "Custom SLA", category: "Enterprise" },
   ];
 
   const renderFeatureValue = (value: any) => {
     if (typeof value === "boolean") {
-      return value ? (
-        <Check className="w-5 h-5 text-pink-500" />
-      ) : (
-        <X className="w-5 h-5 text-gray-400" />
+      return (
+        <div className="flex justify-center items-center">
+          {value ? (
+            <Check className="w-5 h-5 text-blue-600" />
+          ) : (
+            <X className="w-5 h-5 text-gray-400" />
+          )}
+        </div>
       );
     }
-    if (value === "Unlimited") {
-      return <span className="text-pink-500 font-medium">Unlimited</span>;
+    if (Array.isArray(value)) {
+      return (
+        <div className="flex justify-center items-center">
+          <span
+            className={`${
+              isDark ? "text-gray-300" : "text-gray-900"
+            } text-sm text-center`}>
+            {value.join(", ")}
+          </span>
+        </div>
+      );
     }
-    return <span className="text-gray-900">{value}</span>;
+    if (value === "Unlimited" || value === "All" || value === "All + Custom") {
+      return (
+        <div className="flex justify-center items-center">
+          <span className="text-blue-600 font-medium text-center">{value}</span>
+        </div>
+      );
+    }
+    return (
+      <div className="flex justify-center items-center">
+        <span
+          className={`${
+            isDark ? "text-gray-300" : "text-gray-900"
+          } text-sm text-center`}>
+          {value}
+        </span>
+      </div>
+    );
   };
 
   return (
@@ -215,64 +293,111 @@ export default function PricingPage() {
                 No lock-in — upgrade, downgrade, or cancel anytime.
               </p>
 
-              {/* Member Count Slider */}
-              <div className="max-w-2xl mx-auto mb-12">
-                <div className="flex items-center justify-between mb-4">
-                  <div
-                    className={`text-left ${
-                      isDark ? "text-white" : "text-gray-900"
-                    }`}>
-                    <div className="text-sm">Based on an audience up to</div>
-                    <div className="text-lg font-semibold">
-                      <span className="text-pink-500">
-                        {memberCount.toLocaleString()}
-                      </span>{" "}
-                      members
+              {/* Submissions & Billing Row */}
+              <div className="max-w-7xl mx-auto mb-12">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 w-full">
+                  {/* Left: Label */}
+                  <div className="flex-1 min-w-0">
+                    <div
+                      className={`text-sm ${
+                        isDark ? "text-gray-400" : "text-gray-600"
+                      } leading-tight`}>
+                      <div>Based on submissions up to</div>
+                      <div className="font-semibold text-blue-600">
+                        {formatSubmissionCount(memberCount)} submissions/month
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex bg-gray-100 rounded-lg p-1">
+                  {/* Center: Slider with Bubble Chat - Full Width */}
+                  <div className="flex-1 relative w-full">
+                    <div className="relative pt-8 pb-6">
+                      {/* Slider Container - positioned to align everything on the line */}
+                      <div className="relative h-4">
+                        {/* Background track - centered vertically */}
+                        <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-300 dark:bg-gray-600 rounded-lg transform -translate-y-1/2"></div>
+                        {/* Blue progress fill - centered vertically */}
+                        <div
+                          className="absolute top-1/2 left-0 h-1 bg-blue-600 rounded-lg transition-all duration-200 transform -translate-y-1/2"
+                          style={{
+                            width: `${
+                              (getCurrentTierIndex() /
+                                (submissionTiers.length - 1)) *
+                              100
+                            }%`,
+                          }}></div>
+
+                        {/* Slider Input */}
+                        <input
+                          type="range"
+                          min="0"
+                          max={submissionTiers.length - 1}
+                          step="1"
+                          value={getCurrentTierIndex()}
+                          onChange={(e) => {
+                            const index = parseInt(e.target.value);
+                            setMemberCount(submissionTiers[index]);
+                          }}
+                          onMouseDown={(e) => e.stopPropagation()}
+                          onTouchStart={(e) => e.stopPropagation()}
+                          className="slider w-full h-4 rounded-lg appearance-none cursor-grab active:cursor-grabbing relative z-10 pointer-events-auto"
+                        />
+
+                        {/* Bubble Chat Indicator - positioned so arrow touches top of thumb */}
+                        <div
+                          className="absolute left-0 transform transition-all duration-200 ease-out pointer-events-none"
+                          style={{
+                            left: `${
+                              (getCurrentTierIndex() /
+                                (submissionTiers.length - 1)) *
+                              100
+                            }%`,
+                            transform: `translateX(-50%)`,
+                            top: "-4px",
+                            zIndex: 5,
+                          }}>
+                          {/* Bubble */}
+                          <div className="relative -translate-y-full">
+                            <div className="bg-blue-600 text-white px-3 py-1.5 rounded-full text-sm font-bold whitespace-nowrap shadow-lg">
+                              {formatSubmissionCount(memberCount)}
+                            </div>
+                            {/* Arrow pointing down to top edge of slider thumb */}
+                            <div className="absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                              <div className="w-2.5 h-2.5 bg-blue-600 transform rotate-45"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+                        <span>1k</span>
+                        <span>25k</span>
+                        <span>50k</span>
+                        <span>75k</span>
+                        <span>100k+</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right: Billing Toggle */}
+                  <div className="flex items-center gap-2">
                     <button
                       onClick={() => setBillingType("monthly")}
-                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
                         billingType === "monthly"
-                          ? "bg-white text-gray-900 shadow-sm"
-                          : "text-gray-600 hover:text-gray-900"
+                          ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 shadow-sm"
+                          : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 border border-transparent"
                       }`}>
                       Monthly billing
                     </button>
                     <button
                       onClick={() => setBillingType("yearly")}
-                      className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
                         billingType === "yearly"
-                          ? "bg-white text-gray-900 shadow-sm"
-                          : "text-gray-600 hover:text-gray-900"
+                          ? "bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 shadow-sm"
+                          : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 border border-transparent"
                       }`}>
                       Yearly billing
                     </button>
-                  </div>
-                </div>
-
-                {/* Slider */}
-                <div className="relative">
-                  <input
-                    type="range"
-                    min="0"
-                    max="100000"
-                    value={memberCount}
-                    onChange={(e) => setMemberCount(parseInt(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
-                  />
-                  <div className="flex justify-between text-sm text-gray-500 mt-2">
-                    <span>0</span>
-                    <span>100k+</span>
-                  </div>
-
-                  {/* Member count indicator */}
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-pink-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {memberCount.toLocaleString()}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -326,7 +451,10 @@ export default function PricingPage() {
                             className={`text-4xl font-bold ${
                               isDark ? "text-white" : "text-gray-900"
                             }`}>
-                            ${plan.price}
+                            $
+                            {typeof plan.price === "object"
+                              ? plan.price[billingType]
+                              : plan.price}
                           </span>
                           <span
                             className={`text-sm ${
@@ -339,15 +467,219 @@ export default function PricingPage() {
                           className={`text-sm ${
                             isDark ? "text-gray-400" : "text-gray-600"
                           } mb-4`}>
-                          Billed yearly
+                          {billingType === "yearly"
+                            ? "Billed yearly"
+                            : "Billed monthly"}
                         </div>
 
-                        {plan.launchPrice && (
-                          <div className="bg-pink-100 text-pink-700 px-3 py-2 rounded-lg text-sm">
-                            <div className="font-medium mb-1">Launch offer</div>
-                            <div>${plan.launchPrice}/mo for first 3 months</div>
+                        {plan.badge && (
+                          <div className="bg-blue-600 text-white px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide mt-3 inline-block">
+                            {plan.badge}
                           </div>
                         )}
+                      </>
+                    )}
+                  </div>
+
+                  {/* Feature Summary List */}
+                  <div className="mb-6 space-y-2">
+                    {plan.name === "STARTER" && (
+                      <>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            {plan.features.workspaces} workspaces
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            {plan.features.submissionsPerMonth}{" "}
+                            submissions/month
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            {plan.features.integrations.join(", ")}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            {plan.features.support} support
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    {plan.name === "PRO" && (
+                      <>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            Unlimited workspaces
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            {plan.features.submissionsPerMonth}{" "}
+                            submissions/month
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            All integrations (Telegram, WhatsApp, Google Sheets)
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            AI Form Generator
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            Advanced analytics
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            Custom branding
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    {plan.name === "BUSINESS" && (
+                      <>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            {plan.features.submissionsPerMonth}{" "}
+                            submissions/month
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            Priority + Dedicated support
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            Advanced + Custom analytics
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            {plan.features.apiRateLimit} API requests/day
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            {plan.features.storageQuota} storage
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    {plan.name === "ENTERPRISE" && (
+                      <>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            Unlimited everything
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            SSO/SAML
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            Private data regions
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            24/7 Enterprise support
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <span
+                            className={
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }>
+                            Custom SLA & onboarding
+                          </span>
+                        </div>
                       </>
                     )}
                   </div>
@@ -381,22 +713,29 @@ export default function PricingPage() {
                 isDark ? "border-gray-700" : "border-gray-200"
               }`}>
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full pricing-table">
+                  <colgroup>
+                    <col style={{ width: "30%" }} />
+                    <col style={{ width: "17.5%" }} />
+                    <col style={{ width: "17.5%" }} />
+                    <col style={{ width: "17.5%" }} />
+                    <col style={{ width: "17.5%" }} />
+                  </colgroup>
                   <thead>
                     <tr
                       className={`border-b ${
                         isDark ? "border-gray-700" : "border-gray-200"
                       }`}>
                       <th
-                        className={`text-left py-4 px-6 font-medium ${
+                        className={`text-left py-4 px-6 font-medium align-middle ${
                           isDark ? "text-white" : "text-gray-900"
                         }`}>
-                        Website
+                        Platform
                       </th>
                       {plans.map((plan) => (
                         <th
                           key={plan.name}
-                          className={`text-center py-4 px-6 font-medium ${
+                          className={`text-center py-4 px-6 font-medium align-middle ${
                             isDark ? "text-white" : "text-gray-900"
                           }`}>
                           {plan.name.charAt(0) +
@@ -407,7 +746,7 @@ export default function PricingPage() {
                   </thead>
                   <tbody>
                     {featureRows
-                      .filter((row) => row.category === "Website")
+                      .filter((row) => row.category === "Platform")
                       .map((row, index) => (
                         <tr
                           key={row.key}
@@ -421,16 +760,16 @@ export default function PricingPage() {
                               : ""
                           }`}>
                           <td
-                            className={`py-4 px-6 ${
+                            className={`py-4 px-6 align-middle ${
                               isDark ? "text-gray-300" : "text-gray-700"
                             } flex items-center`}>
                             {row.label}
-                            <Info className="w-4 h-4 ml-2 text-gray-400" />
+                            <Info className="w-4 h-4 ml-2 text-gray-400 flex-shrink-0" />
                           </td>
                           {plans.map((plan) => (
                             <td
                               key={plan.name}
-                              className="py-4 px-6 text-center">
+                              className="py-4 px-6 text-center align-middle">
                               {renderFeatureValue(
                                 plan.features[
                                   row.key as keyof typeof plan.features
@@ -443,22 +782,29 @@ export default function PricingPage() {
                   </tbody>
                 </table>
 
-                <table className="w-full mt-8">
+                <table className="w-full mt-8 pricing-table">
+                  <colgroup>
+                    <col style={{ width: "30%" }} />
+                    <col style={{ width: "17.5%" }} />
+                    <col style={{ width: "17.5%" }} />
+                    <col style={{ width: "17.5%" }} />
+                    <col style={{ width: "17.5%" }} />
+                  </colgroup>
                   <thead>
                     <tr
                       className={`border-b ${
                         isDark ? "border-gray-700" : "border-gray-200"
                       }`}>
                       <th
-                        className={`text-left py-4 px-6 font-medium ${
+                        className={`text-left py-4 px-6 font-medium align-middle ${
                           isDark ? "text-white" : "text-gray-900"
                         }`}>
-                        Audience
+                        Integrations & Features
                       </th>
                       {plans.map((plan) => (
                         <th
                           key={plan.name}
-                          className={`text-center py-4 px-6 font-medium ${
+                          className={`text-center py-4 px-6 font-medium align-middle ${
                             isDark ? "text-white" : "text-gray-900"
                           }`}>
                           {plan.name.charAt(0) +
@@ -469,7 +815,7 @@ export default function PricingPage() {
                   </thead>
                   <tbody>
                     {featureRows
-                      .filter((row) => row.category === "Audience")
+                      .filter((row) => row.category !== "Platform")
                       .map((row, index) => (
                         <tr
                           key={row.key}
@@ -483,16 +829,16 @@ export default function PricingPage() {
                               : ""
                           }`}>
                           <td
-                            className={`py-4 px-6 ${
+                            className={`py-4 px-6 align-middle ${
                               isDark ? "text-gray-300" : "text-gray-700"
                             } flex items-center`}>
                             {row.label}
-                            <Info className="w-4 h-4 ml-2 text-gray-400" />
+                            <Info className="w-4 h-4 ml-2 text-gray-400 flex-shrink-0" />
                           </td>
                           {plans.map((plan) => (
                             <td
                               key={plan.name}
-                              className="py-4 px-6 text-center">
+                              className="py-4 px-6 text-center align-middle">
                               {renderFeatureValue(
                                 plan.features[
                                   row.key as keyof typeof plan.features
@@ -510,25 +856,77 @@ export default function PricingPage() {
         </div>
 
         <style jsx>{`
+          .pricing-table {
+            table-layout: fixed;
+          }
+
+          .slider {
+            background: transparent !important;
+          }
+
+          .slider::-webkit-slider-runnable-track {
+            height: 4px;
+            border-radius: 4px;
+            background: transparent !important;
+          }
+
           .slider::-webkit-slider-thumb {
             appearance: none;
-            height: 20px;
-            width: 20px;
+            height: 16px;
+            width: 16px;
             border-radius: 50%;
-            background: #ec4899;
-            cursor: pointer;
+            background: #2563eb;
+            cursor: grab;
             border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+            margin-top: -8px;
+            -webkit-user-select: none;
+            user-select: none;
+            pointer-events: auto;
+          }
+
+          .slider::-webkit-slider-thumb:active {
+            cursor: grabbing;
+          }
+
+          .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            transition: transform 0.1s ease;
+          }
+
+          .slider::-moz-range-track {
+            height: 4px;
+            border-radius: 4px;
+            background: transparent !important;
+            border: none;
           }
 
           .slider::-moz-range-thumb {
-            height: 20px;
-            width: 20px;
+            height: 16px;
+            width: 16px;
             border-radius: 50%;
-            background: #ec4899;
-            cursor: pointer;
+            background: #2563eb;
+            cursor: grab;
             border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+            -moz-user-select: none;
+            user-select: none;
+            pointer-events: auto;
+          }
+
+          .slider::-moz-range-thumb:active {
+            cursor: grabbing;
+          }
+
+          .slider::-moz-range-thumb:hover {
+            transform: scale(1.1);
+            transition: transform 0.1s ease;
+          }
+
+          .slider::-moz-range-progress {
+            height: 4px;
+            border-radius: 4px;
+            background: transparent !important;
           }
         `}</style>
 
