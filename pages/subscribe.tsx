@@ -1,7 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { Check, Shield, ArrowRight, CreditCard } from "lucide-react";
+import {
+  Check,
+  Shield,
+  ArrowRight,
+  CreditCard,
+  ChevronDown,
+} from "lucide-react";
 import Navigation from "../src/components/Navigation";
 import Footer from "../src/components/Footer";
 import { useTheme } from "../src/contexts/ThemeContext";
@@ -21,8 +27,11 @@ interface BillingDetails {
   cardNumber: string;
   expiry: string;
   cvc: string;
-  country: string;
   address: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
   saveCard: boolean;
 }
 
@@ -37,8 +46,11 @@ const initialBilling: BillingDetails = {
   cardNumber: "",
   expiry: "",
   cvc: "",
-  country: "",
   address: "",
+  city: "",
+  state: "",
+  postalCode: "",
+  country: "",
   saveCard: true,
 };
 
@@ -264,16 +276,112 @@ const SubscribePage = () => {
                               /seat
                             </span>
                           </p>
-                          <ul className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
-                            {plan.features.slice(0, 2).map((feature) => (
-                              <li
-                                key={feature}
-                                className="flex items-center gap-2">
-                                <Check className="w-4 h-4 text-emerald-500" />
-                                {feature}
-                              </li>
-                            ))}
-                          </ul>
+                          {/* Feature Summary List - matching pricing page */}
+                          <div className="space-y-2 mt-4">
+                            {plan.name === "Starter" && (
+                              <>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    5 workspaces
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    25,000 submissions/month
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    Email, Webhooks
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    Community support
+                                  </span>
+                                </div>
+                              </>
+                            )}
+                            {plan.name === "Pro" && (
+                              <>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    Unlimited workspaces
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    250,000 submissions/month
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    All integrations (Telegram, WhatsApp, Google
+                                    Sheets)
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    AI Form Generator
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    Advanced analytics
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    Custom branding
+                                  </span>
+                                </div>
+                              </>
+                            )}
+                            {plan.name === "Enterprise" && (
+                              <>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    Unlimited everything
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    SSO/SAML
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    Private data regions
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    24/7 Enterprise support
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm">
+                                  <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                  <span className="text-gray-600 dark:text-gray-300">
+                                    Custom SLA & onboarding
+                                  </span>
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </button>
                       ))}
                     </div>
@@ -407,25 +515,165 @@ const SubscribePage = () => {
                   <form
                     onSubmit={(e) => e.preventDefault()}
                     className="space-y-6">
+                    {/* Card Number Section - Professional Design */}
                     <div>
                       <label
                         htmlFor="card-number"
-                        className={`block text-sm font-medium ${
+                        className={`block text-sm font-medium mb-2 ${
                           isDark ? "text-gray-300" : "text-gray-700"
                         }`}>
                         Card number
                       </label>
-                      <div className="relative mt-2">
+                      <div
+                        className={`relative rounded-xl border-2 transition-all ${
+                          isDark
+                            ? "bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700"
+                            : "bg-gradient-to-br from-gray-50 to-white border-gray-300"
+                        } ${
+                          billing.cardNumber
+                            ? "border-blue-500 shadow-lg shadow-blue-500/20"
+                            : ""
+                        }`}
+                        style={{
+                          padding: "16px",
+                          minHeight: "120px",
+                        }}>
+                        {/* Card Icon */}
+                        <div className="flex items-center justify-between mb-4">
+                          <CreditCard className="w-8 h-8 text-gray-400" />
+                          <div className="flex gap-2">
+                            <div className="w-10 h-6 rounded bg-gradient-to-r from-blue-600 to-purple-600 opacity-60"></div>
+                            <div className="w-10 h-6 rounded bg-gradient-to-r from-yellow-400 to-orange-500 opacity-60"></div>
+                          </div>
+                        </div>
+                        {/* Card Number Input */}
                         <input
                           id="card-number"
                           type="text"
                           inputMode="numeric"
-                          placeholder="4242 4242 4242 4242"
+                          placeholder="1234 5678 9012 3456"
                           value={billing.cardNumber}
+                          onChange={(e) => {
+                            let value = e.target.value.replace(/\s/g, "");
+                            value = value.replace(/\D/g, "");
+                            if (value.length > 16) value = value.slice(0, 16);
+                            const formatted =
+                              value.match(/.{1,4}/g)?.join(" ") || value;
+                            setBilling((prev) => ({
+                              ...prev,
+                              cardNumber: formatted,
+                            }));
+                          }}
+                          className={`w-full bg-transparent text-xl font-semibold tracking-wider focus:outline-none placeholder:text-gray-400 ${
+                            isDark ? "text-white" : "text-gray-900"
+                          }`}
+                          style={{ letterSpacing: "2px" }}
+                        />
+                        {/* Card Details Row */}
+                        <div className="flex items-center justify-between mt-4 text-sm">
+                          <div className="text-gray-400">
+                            {billing.expiry || "MM/YY"}
+                          </div>
+                          <div className="text-gray-400">
+                            {billing.cvc || "CVC"}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Card Details Inputs */}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label
+                          htmlFor="expiry"
+                          className={`block text-sm font-medium mb-2 ${
+                            isDark ? "text-gray-300" : "text-gray-700"
+                          }`}>
+                          Expiry date
+                        </label>
+                        <input
+                          id="expiry"
+                          type="text"
+                          placeholder="MM/YY"
+                          maxLength={5}
+                          value={billing.expiry}
+                          onChange={(e) => {
+                            let value = e.target.value.replace(/\D/g, "");
+                            if (value.length >= 2) {
+                              value =
+                                value.slice(0, 2) + "/" + value.slice(2, 4);
+                            }
+                            setBilling((prev) => ({
+                              ...prev,
+                              expiry: value,
+                            }));
+                          }}
+                          className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 transition ${
+                            isDark
+                              ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/40"
+                              : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
+                          }`}
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="cvc"
+                          className={`block text-sm font-medium mb-2 ${
+                            isDark ? "text-gray-300" : "text-gray-700"
+                          }`}>
+                          CVC
+                        </label>
+                        <input
+                          id="cvc"
+                          type="text"
+                          placeholder="123"
+                          maxLength={4}
+                          inputMode="numeric"
+                          value={billing.cvc}
+                          onChange={(e) => {
+                            const value = e.target.value
+                              .replace(/\D/g, "")
+                              .slice(0, 4);
+                            setBilling((prev) => ({
+                              ...prev,
+                              cvc: value,
+                            }));
+                          }}
+                          className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 transition ${
+                            isDark
+                              ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/40"
+                              : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
+                          }`}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Billing Address Section */}
+                    <div className="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                      <h3
+                        className={`text-lg font-semibold ${
+                          isDark ? "text-white" : "text-gray-900"
+                        }`}>
+                        Billing address
+                      </h3>
+
+                      <div>
+                        <label
+                          htmlFor="address"
+                          className={`block text-sm font-medium mb-2 ${
+                            isDark ? "text-gray-300" : "text-gray-700"
+                          }`}>
+                          Street address
+                        </label>
+                        <input
+                          id="address"
+                          type="text"
+                          placeholder="123 Main Street"
+                          value={billing.address}
                           onChange={(e) =>
                             setBilling((prev) => ({
                               ...prev,
-                              cardNumber: e.target.value,
+                              address: e.target.value,
                             }))
                           }
                           className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 transition ${
@@ -434,67 +682,171 @@ const SubscribePage = () => {
                               : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
                           }`}
                         />
-                        <CreditCard className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label
+                            htmlFor="city"
+                            className={`block text-sm font-medium mb-2 ${
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }`}>
+                            City
+                          </label>
+                          <input
+                            id="city"
+                            type="text"
+                            placeholder="New York"
+                            value={billing.city}
+                            onChange={(e) =>
+                              setBilling((prev) => ({
+                                ...prev,
+                                city: e.target.value,
+                              }))
+                            }
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 transition ${
+                              isDark
+                                ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/40"
+                                : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
+                            }`}
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="state"
+                            className={`block text-sm font-medium mb-2 ${
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }`}>
+                            State / Province
+                          </label>
+                          <input
+                            id="state"
+                            type="text"
+                            placeholder="NY"
+                            value={billing.state}
+                            onChange={(e) =>
+                              setBilling((prev) => ({
+                                ...prev,
+                                state: e.target.value,
+                              }))
+                            }
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 transition ${
+                              isDark
+                                ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/40"
+                                : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
+                            }`}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label
+                            htmlFor="postal-code"
+                            className={`block text-sm font-medium mb-2 ${
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }`}>
+                            Postal / ZIP code
+                          </label>
+                          <input
+                            id="postal-code"
+                            type="text"
+                            placeholder="10001"
+                            value={billing.postalCode}
+                            onChange={(e) =>
+                              setBilling((prev) => ({
+                                ...prev,
+                                postalCode: e.target.value,
+                              }))
+                            }
+                            className={`w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 transition ${
+                              isDark
+                                ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/40"
+                                : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
+                            }`}
+                          />
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="country"
+                            className={`block text-sm font-medium mb-2 ${
+                              isDark ? "text-gray-300" : "text-gray-700"
+                            }`}>
+                            Country
+                          </label>
+                          <div className="relative">
+                            <select
+                              id="country"
+                              value={billing.country}
+                              onChange={(e) =>
+                                setBilling((prev) => ({
+                                  ...prev,
+                                  country: e.target.value,
+                                }))
+                              }
+                              className={`w-full px-4 py-3 pr-10 rounded-xl border focus:outline-none focus:ring-2 transition appearance-none cursor-pointer ${
+                                isDark
+                                  ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/40"
+                                  : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
+                              }`}>
+                              <option value="">Select country</option>
+                              <option value="US">United States</option>
+                              <option value="CA">Canada</option>
+                              <option value="GB">United Kingdom</option>
+                              <option value="AU">Australia</option>
+                              <option value="DE">Germany</option>
+                              <option value="FR">France</option>
+                              <option value="IT">Italy</option>
+                              <option value="ES">Spain</option>
+                              <option value="NL">Netherlands</option>
+                              <option value="BE">Belgium</option>
+                              <option value="CH">Switzerland</option>
+                              <option value="AT">Austria</option>
+                              <option value="SE">Sweden</option>
+                              <option value="NO">Norway</option>
+                              <option value="DK">Denmark</option>
+                              <option value="FI">Finland</option>
+                              <option value="PL">Poland</option>
+                              <option value="PT">Portugal</option>
+                              <option value="IE">Ireland</option>
+                              <option value="NZ">New Zealand</option>
+                              <option value="SG">Singapore</option>
+                              <option value="HK">Hong Kong</option>
+                              <option value="JP">Japan</option>
+                              <option value="KR">South Korea</option>
+                              <option value="IN">India</option>
+                              <option value="BR">Brazil</option>
+                              <option value="MX">Mexico</option>
+                              <option value="AR">Argentina</option>
+                              <option value="ZA">South Africa</option>
+                              <option value="NG">Nigeria</option>
+                              <option value="KE">Kenya</option>
+                              <option value="EG">Egypt</option>
+                              <option value="GH">Ghana</option>
+                              <option value="MA">Morocco</option>
+                              <option value="TZ">Tanzania</option>
+                              <option value="UG">Uganda</option>
+                              <option value="ET">Ethiopia</option>
+                              <option value="AO">Angola</option>
+                              <option value="MZ">Mozambique</option>
+                              <option value="ZM">Zambia</option>
+                              <option value="ZW">Zimbabwe</option>
+                              <option value="MW">Malawi</option>
+                              <option value="RW">Rwanda</option>
+                              <option value="SN">Senegal</option>
+                              <option value="CI">Ivory Coast</option>
+                              <option value="CM">Cameroon</option>
+                              <option value="TN">Tunisia</option>
+                              <option value="DZ">Algeria</option>
+                              <option value="SD">Sudan</option>
+                              <option value="OTHER">Other</option>
+                            </select>
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        placeholder="MM/YY"
-                        value={billing.expiry}
-                        onChange={(e) =>
-                          setBilling((prev) => ({
-                            ...prev,
-                            expiry: e.target.value,
-                          }))
-                        }
-                        className={`px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 transition ${
-                          isDark
-                            ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/40"
-                            : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
-                        }`}
-                      />
-                      <input
-                        type="text"
-                        placeholder="CVC"
-                        value={billing.cvc}
-                        onChange={(e) =>
-                          setBilling((prev) => ({
-                            ...prev,
-                            cvc: e.target.value,
-                          }))
-                        }
-                        className={`px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 transition ${
-                          isDark
-                            ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/40"
-                            : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
-                        }`}
-                      />
-                    </div>
-                    <div>
-                      <label
-                        className={`block text-sm font-medium ${
-                          isDark ? "text-gray-300" : "text-gray-700"
-                        }`}>
-                        Billing address
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Street address"
-                        value={billing.address}
-                        onChange={(e) =>
-                          setBilling((prev) => ({
-                            ...prev,
-                            address: e.target.value,
-                          }))
-                        }
-                        className={`mt-2 px-4 py-3 rounded-xl border focus:outline-none focus:ring-2 transition ${
-                          isDark
-                            ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/40"
-                            : "bg-white border-gray-200 text-gray-900 focus:ring-blue-500/20"
-                        }`}
-                      />
-                    </div>
+
                     <label className="inline-flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                       <input
                         type="checkbox"
