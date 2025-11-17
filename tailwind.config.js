@@ -7,6 +7,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        russo: ['"Russo One"', "sans-serif"],
+      },
       width: {
         112: "28rem", // 448px - double the Product dropdown width (224px)
       },

@@ -119,7 +119,7 @@ export default function HeroSection({ isDark }: HeroSectionProps) {
 
         {/* Main Headline */}
         <h1
-          className={`text-5xl md:text-7xl font-bold mb-6 ${
+          className={`text-5xl md:text-7xl font-bold mb-6 font-russo ${
             isDark ? "text-white" : "text-gray-900"
           }`}>
           Turn your{" "}
